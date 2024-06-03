@@ -2,12 +2,11 @@ import re
 import time
 import webbrowser
 import urllib.parse
-import tkinter as tk
-from tkinter import ttk
+import customtkinter
 from collections import namedtuple
 from playwright.sync_api import sync_playwright
 
-def CenterWindowToDisplay(Screen: tk, width: int, height: int):
+def CenterWindowToDisplay(Screen: customtkinter, width: int, height: int):
     screen_width = Screen.winfo_screenwidth()
     screen_height = Screen.winfo_screenheight()
     x = int((screen_width / 2) - (width / 2))
@@ -91,34 +90,35 @@ def ok_button_click(event=None):
     execution_time = end_time - start_time
     print("Execution Time:", execution_time, "seconds")
 
+# customtkinter.set_appearance_mode("system")
+# customtkinter.set_default_color_theme("blue")
 
-root = tk.Tk()
-root.geometry(CenterWindowToDisplay(root, 570, 130))
+root = customtkinter.CTk()
+root.geometry(CenterWindowToDisplay(root, 290, 145))
 root.title("OP.GG Build Finder")
 
-# Change font of Combobox dropdown list
-root.option_add("*TCombobox*Listbox.font", "Arial 25")
-
 # Region
-label = tk.Label(root, text="Region: ", font=("Arial", 25))
-label.grid(row=0, column=0, sticky="w", pady=10)
+label = customtkinter.CTkLabel(root, text="Region: ", font=("Arial", 25))
+label.grid(row=0, column=0, sticky="w", pady=10, padx=5)
 # Dropdown list
-combo_box = ttk.Combobox(root, values=["NA", "EUW", "EUNE", "OCE", "KR", "JP", "BR", "LAS", "LAN", "RU", "TR",
-                                       "SG", "PH", "TR", "TW", "VN", "TH"], font=("Arial", 25))
+combo_box = customtkinter.CTkComboBox(root, values=["NA", "EUW", "EUNE", "OCE", "KR", "JP", "BR", "LAS", "LAN", "RU", "TR",
+                                       "SG", "PH", "TR", "TW", "VN", "TH"], font=("Arial", 25), state="readonly")
 combo_box.grid(row=0, column=1, sticky="w", pady=10, padx=5)
 # Set default value
 combo_box.set("KR")
 
 # Champion name
-label = tk.Label(root, text="Champion: ", font=("Arial", 25))
-label.grid(row=1, column=0, sticky="w", pady=10)
-champion_entry = tk.Entry(root, font=("Arial", 25))
+label = customtkinter.CTkLabel(root, text="Champion: ", font=("Arial", 25))
+label.grid(row=1, column=0, sticky="w", pady=10, padx=5)
+champion_entry = customtkinter.CTkEntry(root, font=("Arial", 25))
 champion_entry.grid(row=1, column=1, sticky="w", pady=10, padx=5)
+# Wait for button to be fully created before giving it focus
+root.update()
 champion_entry.focus()
 
 # OK Button
-ok_button = tk.Button(root, text="OK", font=("Arial", 18), command=ok_button_click)
-ok_button.grid(row=1, column=1, sticky="e")
+ok_button = customtkinter.CTkButton(root, width=50, text="OK", font=("Arial", 18), command=ok_button_click)
+ok_button.grid(row=3, column=1, sticky="e", padx=5)
 
 # Enter key
 root.bind("<Return>", ok_button_click)
