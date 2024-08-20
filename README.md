@@ -10,7 +10,7 @@ This is a tool to find builds for specific champions from the best one-tricks. I
 
 Then, the program will open the player's OP.GG profile in the user's default web browser.
 
-Please note that it only scrapes information from the top 3 players on OP.GG. The way to retrive information from players below the top 3 changes frequently enough that I decided to not keep updating the program for it.
+Please note that it only scrapes information from the top 3 players on OP.GG. The way to retrieve information from players below the top 3 changes frequently enough that I decided to not keep updating the program for it.
 
 ## Notes
 
