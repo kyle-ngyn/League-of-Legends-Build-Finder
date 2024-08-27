@@ -28,8 +28,12 @@ def sorting_key(player):
 def ok_button_click(event=None):
     start_time = time.time()
     region = combo_box.get()
-    champion = champion_entry.get()
+    championName = champion_entry.get()
     root.destroy()
+
+    whitelist = set('abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ')
+    champion = ''.join(filter(whitelist.__contains__, championName))
+
     url = f"https://www.op.gg/leaderboards/champions/{champion.lower()}?region={region.lower()}"
 
     with sync_playwright() as p:
