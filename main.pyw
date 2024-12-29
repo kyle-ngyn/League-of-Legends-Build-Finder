@@ -18,15 +18,21 @@ Player = namedtuple("Player", ["name", "tag", "rank", "winrate", "games_played"]
 # The "best" player is the one with the highest rank. If ranks are equal, choose the one with a higher winrate.
 # If winrates are equal, choose the one with the most games played.
 def sorting_key(player):
-    rank_order = ["challenger", "grandmaster", "master", "diamond 1", "diamond 2"]
+    rank_order = {"challenger": 0, "grandmaster": 1, "master": 2, "diamond 1": 3, "diamond 2": 4}
     return (
-        rank_order.index(player.rank),
+        rank_order.get(player.rank.lower(), float("inf")),
         -float(player.winrate.strip("%")),
         -int(player.games_played)
     )
 
+def block_resources(route, request):
+    if request.resource_type in ["image", "font", "stylesheet", "media"]:
+        route.abort()
+    else:
+        route.continue_()
+
 def ok_button_click(event=None):
-    start_time = time.time()
+    # start_time = time.time()
     region = combo_box.get()
     championName = champion_entry.get()
     root.destroy()
@@ -39,6 +45,7 @@ def ok_button_click(event=None):
     with sync_playwright() as p:
         browser = p.firefox.launch(headless=True)
         page = browser.new_page()
+        page.on("route", block_resources)
         page.goto(url, wait_until="commit")
 
         # Since this is a dynamically changing page, we must wait for some elements to appear.
@@ -58,9 +65,11 @@ def ok_button_click(event=None):
         # Open the OP.GG webpage for the "best" player.
         players.sort(key=sorting_key)
 
+        '''
         print()
         for player in players:
             print(f"{player.name}: {player.rank.title()}, {player.winrate} winrate, {player.games_played} games")
+        '''
 
         best_player = players[0]
         player_url = f"https://www.op.gg/summoners/{region.lower()}/{urllib.parse.quote(best_player.name)}-{urllib.parse.quote(best_player.tag)}"
@@ -68,9 +77,11 @@ def ok_button_click(event=None):
         webbrowser.open(player_url, new=2, autoraise=False)
         browser.close()
 
+    '''
     end_time = time.time()
     execution_time = end_time - start_time
     print("\nExecution Time:", execution_time, "seconds\n")
+    '''
 
 # customtkinter.set_appearance_mode("system")
 # customtkinter.set_default_color_theme("blue")
