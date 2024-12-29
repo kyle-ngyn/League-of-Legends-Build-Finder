@@ -18,7 +18,7 @@ Player = namedtuple("Player", ["name", "tag", "rank", "winrate", "games_played"]
 # The "best" player is the one with the highest rank. If ranks are equal, choose the one with a higher winrate.
 # If winrates are equal, choose the one with the most games played.
 def sorting_key(player):
-    rank_order = ["Challenger", "Grandmaster", "Master", "Diamond 1", "Diamond 2"]
+    rank_order = ["challenger", "grandmaster", "master", "diamond 1", "diamond 2"]
     return (
         rank_order.index(player.rank),
         -float(player.winrate.strip("%")),
@@ -39,60 +39,38 @@ def ok_button_click(event=None):
     with sync_playwright() as p:
         browser = p.firefox.launch(headless=True)
         page = browser.new_page()
-        page.goto(url)
+        page.goto(url, wait_until="commit")
 
         # Since this is a dynamically changing page, we must wait for some elements to appear.
-        # Tags for ranks, winrates, and games played for the top 3 players are different from the rest of the players.
-        page.wait_for_selector("div.css-12ijbdy.e1swkqyq0")
+        page.locator("tr.css-rmp2x6:nth-child(1) > td:nth-child(2) > a:nth-child(1) > div:nth-child(2)").wait_for()
 
         # Temporary lists to hold player data.
-        player_names = page.query_selector_all("span.css-ao94tw.e1swkqyq1")[:5]
-        player_tags = page.query_selector_all("span.css-1mbuqon.e1swkqyq2")[:5]
-        player_ranks = page.query_selector_all("small")[:3]
-        player_ranks += page.query_selector_all("td.css-13jn5d5.e1nwpw1h3")[:2]
-        player_winrate = page.query_selector_all("span > em")[:6]
-        player_winrate += page.query_selector_all("div.text")[:2]
-        player_games_played = page.query_selector_all("span > em > b")
-        player_games_played += page.query_selector_all("td.css-1amolq6.eyczova1 > b")[:2]
-
-        names = [name.text_content() for name in player_names]
-        tags = [tag.text_content().replace("#", "") for tag in player_tags]
-        ranks = []
-        for rank in player_ranks:
-            rank_text = rank.text_content().split("Lv.")[0].strip().lower()
-            if "challenger" in rank_text:
-                rank_text = "Challenger"
-            elif "grandmaster" in rank_text:
-                rank_text = "Grandmaster"
-            elif "master" in rank_text:
-                rank_text = "Master"
-            elif "diamond 1" in rank_text:
-                rank_text = "Diamond 1"
-            elif "diamond 2" in rank_text:
-                rank_text = "Diamond 2"
-            ranks.append(rank_text)
-        winrates = []
-        for winrate in player_winrate:
-            winrate_text = winrate.text_content().strip()
-            match = re.search(r"\b\d+%$", winrate_text)
-            if match:
-                winrate_percentage = match.group()
-                winrates.append(winrate_percentage)
-        games_played = [number.text_content() for number in player_games_played]
+        names = page.locator(".css-ao94tw.e1swkqyq1").all_text_contents()[3:8]
+        tags = page.locator(".css-1mbuqon.e1swkqyq2").all_text_contents()[3:8]
+        ranks = page.locator(".css-13jn5d5.e4dns9u3").all_text_contents()[:5]
+        winrates = page.locator(".text").all_text_contents()[:5]
+        games_played = page.locator(".css-1amolq6.eyczova1").all_text_contents()[:5]
 
         # Create Player objects.
-        players = [Player(name, tag, rank, winrate, games) for name, tag, rank, winrate, games in zip(names, tags, ranks, winrates, games_played)]
+        players = [Player(name.strip(" "), tag.strip("#"), rank.strip(" "), winrate, "".join(filter(str.isdigit, games)))
+                   for name, tag, rank, winrate, games in zip(names, tags, ranks, winrates, games_played)]
 
         # Open the OP.GG webpage for the "best" player.
         players.sort(key=sorting_key)
+
+        print()
+        for player in players:
+            print(f"{player.name}: {player.rank.title()}, {player.winrate} winrate, {player.games_played} games")
+
         best_player = players[0]
         player_url = f"https://www.op.gg/summoners/{region.lower()}/{urllib.parse.quote(best_player.name)}-{urllib.parse.quote(best_player.tag)}"
+
         webbrowser.open(player_url, new=2, autoraise=False)
         browser.close()
 
     end_time = time.time()
     execution_time = end_time - start_time
-    print("Execution Time:", execution_time, "seconds")
+    print("\nExecution Time:", execution_time, "seconds\n")
 
 # customtkinter.set_appearance_mode("system")
 # customtkinter.set_default_color_theme("blue")

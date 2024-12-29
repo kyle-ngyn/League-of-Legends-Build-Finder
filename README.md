@@ -2,7 +2,7 @@
 
 To install prerequisites, do `pip install -r requirements.txt`.
 
-This is a tool to find builds for specific champions from the best one-tricks. It uses OP.GG to find a list of players and chooses from them in the following priority:
+This is a tool to find builds for specific champions from the best one-tricks. It uses OP.GG to find a list of the top 5 players and chooses from them in the following priority:
 
 1. Highest rank
 2. Highest winrate
@@ -10,7 +10,7 @@ This is a tool to find builds for specific champions from the best one-tricks. I
 
 Then, the program will open the player's OP.GG profile in the user's default web browser.
 
-Please note that it only scrapes information from the top 3 players on OP.GG. The way to retrieve information from players below the top 3 changes frequently enough that I decided to not keep updating the program for it.
+Please note that this tool was developed for **ARAM**. Champion builds are dependent on matchups, elos, and regions, so use for ranked at your own risk.
 
 ## Notes
 
