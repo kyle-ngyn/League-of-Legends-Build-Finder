@@ -1,14 +1,14 @@
-# OP.GG Build Finder
+# ~~OP.GG~~ League of Legends Build Finder
 
 To install prerequisites, do `pip install -r requirements.txt`.
 
-This is a tool to find builds for specific champions from the best one-tricks. It uses OP.GG to find a list of the top 5 players and chooses from them in the following priority:
+This is a tool to find builds for specific champions from the best one-tricks. It uses OP.GG or U.GG (your choice!) to find a list of the top 5 players and chooses from them in the following priority:
 
-1. Highest rank
+1. Highest rank and LP
 2. Highest winrate
 3. Most games played
 
-Then, the program will open the player's OP.GG profile in the user's default web browser.
+Then, the program will open the player's profile in the user's default web browser.
 
 Please note that this tool was developed for **ARAM**. Champion builds are dependent on matchups, elos, and regions, so use for ranked at your own risk.
 
@@ -20,11 +20,13 @@ Please note that this tool was developed for **ARAM**. Champion builds are depen
 
 * **NamedTuple**: A "Player" was originally a class, but it didn't really need to be since its only method was to print out its information. A NamedTuple is just slightly less overhead.
 
+* **OP.GG or U.GG?**: U.GG is a slightly more responsive website, so the U.GG build finder will be faster most of the time.
+
 ## Difficulties
 
-* **Speed**: The program takes ~10 seconds the first time it is ran. Afterwards, it takes ~4-6 seconds, which is not fast enough.
+* **Speed**: The program now takes ~4-5 seconds, which is pretty quick, but I do wish it was 2 seconds or faster.
 
-* **Async**: Still having trouble with implementing async, but the program is small enough that I (think?) the program wouldn't be much faster with it.
+* **Async**: Still having trouble with implementing async, but the program is small enough that I (think?) the program wouldn't be much faster with it. This is also quite complicated to implement with tkinter.
 
 * **Distribution**: I wanted to make the program a `.exe` file for one other person to use, but every program I tried (Nuitka, Cython, PyInstaller, etc.) was always flagged as a virus by Windows Defender, even if I didn't use `-onefile`. This is because the way these programs pack the files together is similar to the way malware is packed.
 
@@ -32,6 +34,7 @@ Please note that this tool was developed for **ARAM**. Champion builds are depen
     1. Encryption
     2. Create an exception in antivirus
     3. Message Microsoft with the program and they can create a global exception
+    4. Signature!
 
 ## Credits
 

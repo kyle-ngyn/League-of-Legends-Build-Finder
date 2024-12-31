@@ -1,5 +1,4 @@
-import re
-import time
+#import time
 import webbrowser
 import urllib.parse
 import customtkinter
@@ -32,7 +31,7 @@ def block_resources(route, request):
         route.continue_()
 
 def ok_button_click(event=None):
-    # start_time = time.time()
+    #start_time = time.time()
     region = combo_box.get()
     championName = champion_entry.get()
     root.destroy()
