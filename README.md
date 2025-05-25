@@ -12,6 +12,8 @@ Then, the program will open the player's profile in the user's default web brows
 
 Please note that this tool was developed for **ARAM**. Champion builds are dependent on matchups, elos, and regions, so use for ranked at your own risk.
 
+If it doesn't seem to work, there's probably no data currently available on OP.GG/U.GG leaderboards (ex. the season reset).
+
 ## Notes
 
 * **Requests & Beautiful Soup**: The information I want to scrape is part of JavaScript data that is loaded dynamically. Thus, the Requests library won't work, since it only gets static HTML elements.
