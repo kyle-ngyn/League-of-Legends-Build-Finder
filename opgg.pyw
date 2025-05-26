@@ -61,12 +61,12 @@ def ok_button_click(event=None):
         games_played = page.locator("td:nth-child(6) > div:nth-child(1)").all_text_contents()[:5]
 
         # Create Player objects.
-        players = [Player(name.strip(),
+        players = [Player(name,
                           tag.strip("#"),
-                          rank.strip(),
-                          LP.strip(),
-                          winrate.strip(),
-                          "".join(filter(str.isdigit, games)))
+                          rank,
+                          LP.replace(",", ""),
+                          winrate,
+                          games.replace(",", ""))
                           for name, tag, rank, LP, winrate, games in zip(names, tags, ranks, LPs, winrates, games_played)]
 
         # Open the OP.GG webpage for the "best" player.
@@ -77,7 +77,7 @@ def ok_button_click(event=None):
         for player in players:
             print(f"{player.name}#{player.tag}: {player.rank} {player.LP} LP, {player.winrate} winrate, {player.games_played} games")
         '''
-        
+
         best_player = players[0]
         player_url = f"https://www.op.gg/lol/summoners/{region.lower()}/{urllib.parse.quote(best_player.name)}-{urllib.parse.quote(best_player.tag)}"
 
